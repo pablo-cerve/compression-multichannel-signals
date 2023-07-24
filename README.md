@@ -64,8 +64,8 @@ $ [PROJECT_PATH]/run decode d vwc_1202.dat.csv.compressed2.bin vwc_1202.dat.csv.
 ```
 
 ## [4] External Code
-1. Implementation of algorithms `PWLH*`, `SF*` and `GAMPS*` reuse part of the source code from the framework cited in [6].
-2. We use the CACM87 implementation [29, 30] of the arithmetic coder, which is written in C.
+1. Implementation of algorithms `PWLH*`, `SF*` and `GAMPS*` reuse part of the source code from the framework cited in [6]. This code is in folder `external/benchmarkLinux`.
+2. We use the CACM87 implementation [29, 30] of the arithmetic coder, which is written in C. This code is in folder `external/ari`.
 
 [6] N. Q. V. Hung, H. Jeung, K. Aberer, An Evaluation of Model- Based Approaches to Sensor Data Compression, IEEE Transactions on Knowledge and Data Engineering 25 (11) (2013) 2434–2447. doi:10.1109/TKDE.2012.237
 
