@@ -31,6 +31,8 @@ All the arguments are required:
 - `[w]`: value for the window size parameter *w*, e.g. `4`, `8`, `16`, `32`, `64`, `128`, `256`
 - `[ε1] [ε2] ... [εn]`: `εi` represents the (non-negative integer) error bound ε (as defined in Definition 1.1) for data column `i`. The number of error bounds must match the number of data columns in the input dataset file to be coded.
 
+The output shows the total number of bits of the coded file, detailing how many bits are used for encoding the header, the timestamp column and the data columns. The number of bits used for encoding the data columns are grouped by data type.  In every case the number of bits used for encoding the gap locations (Line 4 in Figure 1) and the rest of the data (Line 6 or 8 -depending on the coder- in Figure 1) are shown.
+
 #### [3.1.1] Code with error parameter *e*
 Instead of passing arguments `error_mode=epsilon [ε1] [ε2] ... [εn]`, one can pass arguments `error_mode=e [e]`
 ```
@@ -39,6 +41,12 @@ $ [PROJECT_PATH]/run code [INPUT_FILE_PATH] [OUTPUT_FILE_PATH] [CODER_NAME] [w] 
 - `[e]` represents the error parameter *e* (as defined in Section 4.1), which can have values `0`, `3`, `5`, `10`, `20`, or `30`
 
 The error bounds for each dataset file are precomputed in file `src/dataset/epsilon_mapper.cpp`.
+
+#### [3.1.2] Code with coder Base
+Coder Base (defined in the paragraph before Definition 4.2) is a trivial lossless coder which doesn't require any window size or error parameters.
+```
+$ [PROJECT_PATH]/run code [INPUT_FILE_PATH] [OUTPUT_FILE_PATH] Base
+```
 
 ### [3.2] Decode
 ```
@@ -64,11 +72,12 @@ $ [PROJECT_PATH]/run decode vwc_1202.dat.csv.compressed2.bin vwc_1202.dat.csv.de
 ```
 
 ## [4] External Code
-- Implementation of algorithms `PWLH*`, `SF*` and `GAMPS*` reuse part of the source code from the framework cited in [6]. This code is in folder `external/benchmarkLinux`.
-- We use the CACM87 implementation [29, 30] of the arithmetic coder, which is written in C. This code is in folder `external/ari`.
+- Implementation of algorithms `PWLH*`, `SF*` and `GAMPS*` reuse part of the source code from the framework cited in [Hung2013]. This code is in folder `external/benchmarkLinux`.
+- We use the [CACM87 implementation of the arithmetic coder](https://marknelson.us/posts/2014/10/19/data-compression-with-arithmetic-coding.html) [Witten1987], which is written in C. This code is in folder `external/ari`.
 
-[6] N. Q. V. Hung, H. Jeung, K. Aberer, An Evaluation of Model- Based Approaches to Sensor Data Compression, IEEE Transactions on Knowledge and Data Engineering 25 (11) (2013) 2434–2447. doi:10.1109/TKDE.2012.237
+[Hung2013] N. Q. V. Hung, H. Jeung, K. Aberer, An Evaluation of Model- Based Approaches to Sensor Data Compression, IEEE Transactions on Knowledge and Data Engineering 25 (11) (2013) 2434–2447. doi:10.1109/TKDE.2012.237
 
-[29] I.H. Witten, R.M. Neal, and J.G. Cleary. Arithmetic Coding for Data Compression. Communications of the ACM, 30(6):520–540, 1987.
+[Witten1987] I.H. Witten, R.M. Neal, and J.G. Cleary. Arithmetic Coding for Data Compression. Communications of the ACM, 30(6):520–540, 1987.
 
-[30] Data Compression With Arithmetic Coding. https://marknelson.us/posts/2014/10/19/data-compression-with-arithmetic-coding.html, 2014.
+## [5] Contact
+Pablo Cerveñansky Fierro - pablofing2015[at]gmail[dot]com
