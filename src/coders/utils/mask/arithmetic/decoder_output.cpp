@@ -42,7 +42,6 @@ void DecoderOutput::putByte(int c){
     reset_model = false;
     bool nodata = c == 1;
     mask->add(nodata);
-    // std::cout << "[" << row_index << "] >>>>>>>>>>>>>>>>>>> DecoderOutput = " << c << std::endl;
     row_index++;
     if (row_index == data_rows_count){
         endCurrentColumn();

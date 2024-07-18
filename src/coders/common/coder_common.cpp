@@ -14,6 +14,10 @@ CoderCommon::CoderCommon(std::string coder_name_, CSVReader* input_csv_, BitStre
    dataset = new Dataset();
 }
 
+bool CoderCommon::isCoder(std::string _coder_name){
+    return coder_name == _coder_name;
+}
+
 void CoderCommon::codeCoderName() {
     int coder_value = Constants::getCoderValue(coder_name);
 #if CHECKS
@@ -32,8 +36,8 @@ void CoderCommon::codeWindowParameter() {
 Dataset* CoderCommon::code(){
     data_rows_count = HeaderCoder(input_csv, this).codeHeader(dataset);
 
-    bool coder_base = coder_name == "Base";
-    codeDataRows(coder_base);
+    bool is_lossless = Constants::isLosslessCoder(coder_name);
+    codeDataRows(is_lossless);
 
     dataset->printBits();
     closeFiles();
@@ -88,6 +92,11 @@ void CoderCommon::codeWindowLength(Window* window){
 void CoderCommon::codeUnary(int value){
     for(int i=0; i < value; i++) { codeBit(0); }
     codeBit(1);
+}
+
+void CoderCommon::codeUnaryInv(int value){
+    for(int i=0; i < value; i++) { codeBit(1); }
+    codeBit(0);
 }
 
 void CoderCommon::codeValueRaw(std::string x){

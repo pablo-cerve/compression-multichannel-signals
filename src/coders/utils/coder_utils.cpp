@@ -106,7 +106,6 @@ std::vector<int> CoderUtils::createXCoordsVectorMaskModeSF(Mask* mask, std::vect
             continue; // skip no_data
         }
         delta_sum += calculateDelta(delta, i);
-//        std::cout << "delta_sum = " << delta_sum << std::endl;
         result.push_back(delta_sum);
     }
     return result;

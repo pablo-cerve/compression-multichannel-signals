@@ -21,6 +21,9 @@ public:
 
     static int getCoderValue(std::string coder_name);
     static std::string getCoderName(int coder_value);
+
+    static bool isLosslessCoder(std::string coder_name);
+    static bool requiresWindowSize(std::string coder_name);
 };
 
 #endif //CPP_PROJECT_CONSTANTS_H

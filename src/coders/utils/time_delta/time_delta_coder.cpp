@@ -1,43 +1,39 @@
 
-#include "vector_utils.h"
-#include "string_utils.h"
 #include "time_delta_coder.h"
-#include "conversor.h"
+
+#include "vector_utils.h"
 #include "coder_utils.h"
-#include "apca_window.h"
+#include "coder_base.h"
+#include "coder_gorilla.h"
+#include "coder_ts2diff.h"
+#include "coder_pca.h"
+#include "coder_apca.h"
 
 std::vector<int> TimeDeltaCoder::code(CoderCommon* coder){
-    int window_size = getWindowSize(coder->dataset->dataset_name);
-    int epsilon = 0; // timestamps column is always encoded lossless
-    bool mask_mode = false;
-    APCAWindow* window = new APCAWindow(window_size, epsilon, mask_mode);
-
-    CSVReader* input_csv = coder->input_csv;
-
-    std::vector<int> time_delta_vector{};
-    input_csv->goToFirstDataRow(0);
-    bool first_value = true;
-    while (input_csv->continue_reading){
-        std::string csv_value = input_csv->readNextValue();
-        if (first_value){
-            assert(csv_value == "0");
-            first_value = false;
-        }
-        // add int value to the time_delta_vector
-        int csv_value_int = Conversor::stringToInt(csv_value);
-        time_delta_vector.push_back(csv_value_int);
-
-        if (!window->conditionHolds(csv_value)){
-            coder->codeWindowLength((Window*) window);
-            coder->codeValueRaw(window->constant_value);
-            window->addFirstValue(csv_value);
-        }
+    std::vector<int> column;
+    
+    if (coder->isCoder("Base")) {
+        column = CoderBase::codeTimeDelta((CoderBase*) coder);
     }
-    if (!window->isEmpty()){
-        coder->codeWindowLength((Window*) window);
-        coder->codeValueRaw(window->constant_value);
+    else if (coder->isCoder("Gorilla")){
+        column = CoderGorilla::codeTimeDelta((CoderGorilla*) coder);
     }
-    return time_delta_vector;
+    else if (coder->isCoder("TS2Diff")){
+        // use the window_size passed as argument
+        int window_size = coder->window_size;
+        column = CoderTS2Diff::codeTimeDelta((CoderTS2Diff*) coder, window_size);
+    }
+    else if (coder->isCoder("PCA*")){
+        // use the window_size passed as argument
+        int window_size = coder->window_size;
+        column = CoderPCA::codeTimeDelta((CoderPCA*) coder, window_size);
+    }
+    else {
+        // use a fixed window_size, based on experimental results
+        int window_size = getWindowSize(coder->dataset->dataset_name);
+        column = CoderAPCA::codeTimeDelta(coder, window_size);
+    }
+    return column;
 }
 
 int TimeDeltaCoder::getWindowSize(std::string dataset_name){

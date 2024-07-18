@@ -11,7 +11,7 @@
 class DecoderCommon {
 
 private:
-    virtual void decodeDataRows(bool base_decoder_) = 0;
+    virtual void decodeDataRows(bool is_lossless_) = 0;
     std::string decodeValue(int y);
     int decodeRaw();
     void closeFiles();
@@ -39,6 +39,7 @@ public:
     // main methods
     //
     static std::string decodeCoderName(BitStreamReader* input_file);
+    bool isDecoder(std::string coder_name_);
     DecoderCommon(std::string coder_name_, BitStreamReader* input_file_, CSVWriter* output_csv_);
     void decodeWindowParameter();
     void decode();
@@ -53,6 +54,7 @@ public:
     int decodeWindowLength(int window_size_bit_length);
     int decodeWindowLength();
     int decodeUnary();
+    int decodeUnaryInv();
     std::string decodeValueRaw();
     float decodeFloat();
     void flushByte();

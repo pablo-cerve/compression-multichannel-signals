@@ -8,7 +8,7 @@
 class CoderCols: public CoderCommon {
 
 private:
-    void codeDataRows(bool base_coder_) override;
+    void codeDataRows(bool is_lossless_) override;
 
     void codeColumn();
 
@@ -17,7 +17,7 @@ private:
     virtual void codeColumnAfter() = 0;
 
 protected:
-    bool base_coder = false;
+    bool is_lossless = false;
     int column_index = 0;
     int row_index = 0;
     int delta_sum = 0;

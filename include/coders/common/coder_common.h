@@ -12,7 +12,7 @@
 class CoderCommon {
 
 private:
-    virtual void codeDataRows(bool base_coder_) = 0;
+    virtual void codeDataRows(bool is_lossless_) = 0;
     //
     // This method maps a value read in the csv file into an integer to be written in the output file.
     //
@@ -21,7 +21,6 @@ private:
     void closeFiles();
 
 protected:
-    int window_size;
     std::string coder_name;
 
 public:
@@ -29,11 +28,13 @@ public:
     BitStreamWriter* output_file;
     Dataset* dataset;
     int data_rows_count;
+    int window_size;
 
     //
     // main methods
     //
     CoderCommon(std::string coder_name_, CSVReader* input_csv_, BitStreamWriter* output_file_);
+    bool isCoder(std::string _coder_name);
     void codeCoderName();
     void codeWindowParameter();
     Dataset* code();
@@ -47,6 +48,7 @@ public:
     void codeInt(int value, int bits);
     void codeWindowLength(Window* window);
     void codeUnary(int value);
+    void codeUnaryInv(int value);
     void codeValueRaw(std::string x);
     void codeFloat(float x);
     void flushByte();

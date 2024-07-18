@@ -40,18 +40,31 @@ int main(int argc, char *argv[]){
         int window_size = 1;
         std::vector<int> epsilons_vector;
 
-        if (coder_name == "Base"){
-            // all the columns are encoded lossless, so no error arguments needed
-            if (argc > 5) { throw std::invalid_argument("Too many arguments for code with Base."); }
+        bool is_lossless = Constants::isLosslessCoder(coder_name);
+        bool requires_window_size = Constants::requiresWindowSize(coder_name);
+        
+        if (is_lossless) {
+            if (!requires_window_size){
+                if (argc > 5) { throw std::invalid_argument("Too many arguments for code with " + coder_name + "."); }
+                MainHelper::code(coder_name, full_input_path, full_output_path, window_size, epsilons_vector);
+                return 0;
+            }
+            else if (argc < 6) { 
+                throw std::invalid_argument("Missing arguments for code with " + coder_name + ".");
+            }
+        }
 
+        assert(requires_window_size);
+        window_size = atoi(argv[5]);
+
+        if (is_lossless){
+            if (argc > 6) { throw std::invalid_argument("Too many arguments for code with " + coder_name + "."); }
             MainHelper::code(coder_name, full_input_path, full_output_path, window_size, epsilons_vector);
             return 0;
         }
 
-        // coder_name != "Base"
+        // !is_lossless && requires_window_size
         if (argc < 8) { throw std::invalid_argument("Missing arguments for code with " + coder_name + "."); }
-
-        window_size = atoi(argv[5]);
 
         // check that error_mode is "error_mode=epsilon" or "error_mode=e"
         std::string error_mode = argv[6];

@@ -1,13 +1,14 @@
 
-#include "vector_utils.h"
 #include "decoder_cols.h"
+
+#include "vector_utils.h"
 #include "assert.h"
 #include "string_utils.h"
 #include "arithmetic_mask_decoder.h"
 #include "time_delta_decoder.h"
 
-void DecoderCols::decodeDataRows(bool base_decoder_){
-    base_decoder = base_decoder_;
+void DecoderCols::decodeDataRows(bool is_lossless_){
+    is_lossless = is_lossless_;
     int total_columns = dataset->data_columns_count + 1;
 
     std::vector<std::vector<std::string>> columns;
@@ -17,7 +18,7 @@ void DecoderCols::decodeDataRows(bool base_decoder_){
     column = decodeColumn();
     columns.push_back(column);
 
-    if (!base_decoder){
+    if (!is_lossless){
         ArithmeticMaskDecoder* amd = new ArithmeticMaskDecoder(this, dataset->data_columns_count);
         masks_vector = amd->decode();
     }
@@ -38,9 +39,9 @@ std::vector<std::string> DecoderCols::decodeColumn(){
         std::vector<std::string> vec = TimeDeltaDecoder::decode(this);
         return vec;
     }
-    if (!base_decoder) {
+    if (!is_lossless) {
         mask = masks_vector.at(column_index - 1);
     }
-    std::vector<std::string> col = decodeDataColumn(!base_decoder);
+    std::vector<std::string> col = decodeDataColumn(!is_lossless);
     return col;
 }

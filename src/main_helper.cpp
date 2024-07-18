@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "decoder_base.h"
+#include "decoder_ts2diff.h"
+#include "decoder_gorilla.h"
 #include "decoder_pca.h"
 #include "decoder_apca.h"
 #include "decoder_pwlh.h"
@@ -11,6 +13,8 @@
 #include "decoder_fr.h"
 #include "decoder_gamps.h"
 #include "coder_base.h"
+#include "coder_ts2diff.h"
+#include "coder_gorilla.h"
 #include "coder_pca.h"
 #include "coder_apca.h"
 #include "coder_pwlh.h"
@@ -90,9 +94,19 @@ Dataset* MainHelper::code(std::string coder_name, std::string full_input_path, s
 
     CoderCommon* coder;
 
+    // lossless without window param
     if (coder_name == "Base"){
         coder = new CoderBase(coder_name, csv_reader, bit_stream_writer);
     }
+    else if (coder_name == "Gorilla"){
+        coder = new CoderGorilla(coder_name, csv_reader, bit_stream_writer);
+    }
+    // lossless with window param
+    else if (coder_name == "TS2Diff"){
+        coder = new CoderTS2Diff(coder_name, csv_reader, bit_stream_writer);
+        ((CoderTS2Diff*) coder)->setWindowSize(window_size);
+    }
+    // lossy with window param
     else if (coder_name == "PCA*"){
         coder = new CoderPCA(coder_name, csv_reader, bit_stream_writer);
         ((CoderPCA*) coder)->setCoderParams(window_size, epsilons_vector);
@@ -127,7 +141,7 @@ Dataset* MainHelper::code(std::string coder_name, std::string full_input_path, s
     }
 
     coder->codeCoderName();
-    if (coder_name != "Base") {
+    if (Constants::requiresWindowSize(coder_name)){
         coder->codeWindowParameter();
     }
     return coder->code();
@@ -143,29 +157,37 @@ void MainHelper::decode(std::string full_input_path, std::string full_output_pat
     if (coder_name == "Base") {
         decoder = new DecoderBase(coder_name, bit_stream_reader, csv_writer);
     }
-    else {
-        if (coder_name == "PCA*") {
-            decoder = new DecoderPCA(coder_name, bit_stream_reader, csv_writer);
-        }
-        else if (coder_name == "APCA*") {
-            decoder = new DecoderAPCA(coder_name, bit_stream_reader, csv_writer);
-        }
-        else if (coder_name == "PWLH*" || coder_name == "PWLH*Int") {
-            decoder = new DecoderPWLH(coder_name, bit_stream_reader, csv_writer);
-            ((DecoderPWLH *) decoder)->setIntegerMode();
-        }
-        else if (coder_name == "CA*") {
-            decoder = new DecoderCA(coder_name, bit_stream_reader, csv_writer);
-        }
-        else if (coder_name == "FR*") {
-            decoder = new DecoderFR(coder_name, bit_stream_reader, csv_writer);
-        }
-        else if (coder_name == "SF*") {
-            decoder = new DecoderSlideFilter(coder_name, bit_stream_reader, csv_writer);
-        }
-        else { // if (coder_name == "GAMPS*"){
-            decoder = new DecoderGAMPS(coder_name, bit_stream_reader, csv_writer);
-        }
+    else if (coder_name == "Gorilla") {
+        decoder = new DecoderGorilla(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "TS2Diff"){
+        decoder = new DecoderTS2Diff(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "PCA*") {
+        decoder = new DecoderPCA(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "APCA*") {
+        decoder = new DecoderAPCA(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "PWLH*" || coder_name == "PWLH*Int") {
+        decoder = new DecoderPWLH(coder_name, bit_stream_reader, csv_writer);
+        ((DecoderPWLH *) decoder)->setIntegerMode();
+    }
+    else if (coder_name == "CA*") {
+        decoder = new DecoderCA(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "FR*") {
+        decoder = new DecoderFR(coder_name, bit_stream_reader, csv_writer);
+    }
+    else if (coder_name == "SF*") {
+        decoder = new DecoderSlideFilter(coder_name, bit_stream_reader, csv_writer);
+    }
+    else { // if (coder_name == "GAMPS*"){
+        assert(coder_name == "GAMPS*");
+        decoder = new DecoderGAMPS(coder_name, bit_stream_reader, csv_writer);
+    }
+
+    if (Constants::requiresWindowSize(coder_name)){
         decoder->decodeWindowParameter();
     }
     decoder->decode();

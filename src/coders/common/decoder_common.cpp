@@ -17,6 +17,10 @@ std::string DecoderCommon::decodeCoderName(BitStreamReader* input_file){
     return coder_name;
 }
 
+bool DecoderCommon::isDecoder(std::string coder_name_){
+    return coder_name == coder_name_;
+}
+
 void DecoderCommon::decodeWindowParameter(){
     int window_parameter = input_file->getInt(8) + 1; // 8 bits for the window_size
     window_size = window_parameter;
@@ -26,8 +30,8 @@ void DecoderCommon::decodeWindowParameter(){
 void DecoderCommon::decode(){
     dataset = HeaderDecoder(input_file, output_csv).decodeHeader(data_rows_count);
 
-    bool coder_base = coder_name == "Base";
-    decodeDataRows(coder_base);
+    bool is_lossless = Constants::isLosslessCoder(coder_name);
+    decodeDataRows(is_lossless);
 
     closeFiles();
 }
@@ -71,6 +75,12 @@ int DecoderCommon::decodeUnary(){
     return value;
 }
 
+int DecoderCommon::decodeUnaryInv(){
+    int value = 0;
+    while (decodeBool()) { value++; }
+    return value;
+}
+
 std::string DecoderCommon::decodeValueRaw(){
     int value = decodeRaw();
     std::string coded_value;
@@ -78,7 +88,7 @@ std::string DecoderCommon::decodeValueRaw(){
         coded_value = decodeValue(value);
     }
     catch( const std::invalid_argument& e ){
-        std::cout << "DecoderCommon::decodeValueRaw: " << e.what() << std::endl;
+        std::cout << "ERROR: DecoderCommon::decodeValueRaw: " << e.what() << std::endl;
         delete input_file;
         delete output_csv;
         exit(-1);
