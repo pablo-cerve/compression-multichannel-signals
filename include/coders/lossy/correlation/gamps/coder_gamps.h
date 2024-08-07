@@ -19,7 +19,7 @@ private:
     Mask* nodata_rows_mask;
     std::vector<int> total_data_rows_vector;
 
-    void codeDataRows(bool is_lossless_) override;
+    void codeDataRows(bool mask_mode_) override;
 
     std::vector<int> getGAMPSEpsilonsVector();
     void codeTimeDeltaColumn();

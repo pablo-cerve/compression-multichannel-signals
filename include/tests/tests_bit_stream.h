@@ -8,12 +8,11 @@
 class TestsBitStream {
 
 public:
-    static void runAll();
+    static void runAll(std::string full_dataset_path);
 
 private:
-    static const std::string TESTS_BIT_STREAM_PATH;
-    static void floatTest();
-    static void doubleTest();
+    static void floatTest(std::string full_dataset_path);
+    static void doubleTest(std::string full_dataset_path);
 
 };
 

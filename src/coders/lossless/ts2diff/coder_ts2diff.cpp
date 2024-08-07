@@ -11,18 +11,21 @@ void CoderTS2Diff::setWindowSize(int window_size_){
 void CoderTS2Diff::codeColumnBefore() {
     read_first_value = false;
     window = new TS2DiffWindow(window_size);
-    no_data_value = dataset->column_code-> range->end + 1;
+    if (!mask_mode) {
+        no_data_value = dataset->column_code-> range->end + 1;
+    }
 }
 
 void CoderTS2Diff::codeColumnWhile(std::string csv_value){
-    if (column_index == -1) std::cout << "csv_value = " << csv_value << std::endl;
     int value;
     if (Constants::isNoData(csv_value)) {
+        if (mask_mode) { return; } // skip gap
+
         value = no_data_value;
     }
     else {
         value = Conversor::stringToInt(csv_value);
-    } 
+    }
 
     if (!read_first_value) {
         read_first_value = true;
@@ -41,10 +44,7 @@ void CoderTS2Diff::codeColumnAfter() {
 }
 
 void CoderTS2Diff::codeWindow(CoderTS2Diff* coder, TS2DiffWindow* window){
-    if (coder->column_index == -1) std::cout << "********************* codeWindow" << std::endl;
-    if (coder->column_index == -1) window->print();
     window->substractMin();
-    if (coder->column_index == -1) window->print();
     codeWindowMin(coder, window);
     int significant_bits = codeWindowSignificantBits(coder, window);
 
@@ -52,7 +52,6 @@ void CoderTS2Diff::codeWindow(CoderTS2Diff* coder, TS2DiffWindow* window){
         for(int i=0; i < window->values->size(); i++){
             int delta = window->values->at(i);
             coder->codeInt(delta, significant_bits);
-            if (coder->column_index == -1) std::cout << "1coder->codeInt(" << delta << ", " << significant_bits << ");" << std::endl;
         }
     }
     window->clearWindow();
@@ -63,15 +62,12 @@ void CoderTS2Diff::codeWindowMin(CoderTS2Diff* coder, TS2DiffWindow* window){
     int value = min;
     if (min > 0){
         coder->codeBit(0);
-        if (coder->column_index == -1)  std::cout << "coder->codeBit(0);" << std::endl;
     }
     else {
         coder->codeBit(1);
-        if (coder->column_index == -1)  std::cout << "coder->codeBit(1);" << std::endl;
         value = -min;
     }
     coder->codeInt(value, coder->dataset->bits());
-    if (coder->column_index == -1) std::cout << "2coder->codeInt(" << value << ", " << coder->dataset->bits() << ");" << std::endl;
 }
 
 int CoderTS2Diff::codeWindowSignificantBits(CoderTS2Diff* coder, TS2DiffWindow* window){
@@ -79,7 +75,6 @@ int CoderTS2Diff::codeWindowSignificantBits(CoderTS2Diff* coder, TS2DiffWindow* 
     // TODO: inefficient, calculate this once for each column
     int bits_needed_to_code_significant_bits = MathUtils::bitLength(coder->dataset->bits());
     coder->codeInt(significant_bits, bits_needed_to_code_significant_bits);
-    if (coder->column_index == -1) std::cout << "3coder->codeInt(" << significant_bits << ", " << bits_needed_to_code_significant_bits << ");" << std::endl;
     return significant_bits;
 }
 
@@ -90,7 +85,7 @@ std::vector<int> CoderTS2Diff::codeTimeDelta(CoderTS2Diff* coder, int window_siz
     input_csv->goToFirstDataRow(0);
     bool first_value = true;
     TS2DiffWindow* window = new TS2DiffWindow(window_size);
-    
+
     while (input_csv->continue_reading){
         std::string csv_delta = input_csv->readNextValue();
         int delta = Conversor::stringToInt(csv_delta);
@@ -102,12 +97,12 @@ std::vector<int> CoderTS2Diff::codeTimeDelta(CoderTS2Diff* coder, int window_siz
             first_value = false;
             continue;
         }
-        
+
         // code similar to CoderTS2Diff::codeColumnWhile
         if (window->isFull()){ codeWindow(coder, window); }
         window->addValue(delta);
     }
     // same code as CoderAPCA::codeColumnAfter
     if (!window->isEmpty()){ codeWindow(coder, window); }
-    return time_delta_vector; 
+    return time_delta_vector;
 }

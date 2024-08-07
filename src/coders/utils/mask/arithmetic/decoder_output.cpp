@@ -12,9 +12,6 @@ DecoderOutput::DecoderOutput(int data_columns_count_, int data_rows_count_){
 
 void DecoderOutput::setNextColumn(int col_index){
     column_index = col_index;
-#if COUT
-    std::cout << "decode mask column_index " << column_index << std::endl;
-#endif
     row_index = 0;
     mask = new Mask();
 }

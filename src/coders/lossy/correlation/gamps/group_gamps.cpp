@@ -70,7 +70,6 @@ GAMPSInput* GroupGAMPS::getGAMPSInput(){
 }
 
 CDataStream* GroupGAMPS::getColumn(int column_index){
-//    std::cout << "BEGIN getColumn" << std::endl;
     CDataStream* dataStream = new CDataStream();
 
     nodata_rows_mask->reset();
@@ -98,7 +97,6 @@ CDataStream* GroupGAMPS::getColumn(int column_index){
             }
             previous_value = current_value;
         }
-        // std::cout << "add(DataItem(" << current_value << ", " << timestamp << ")" << std::endl;
         dataStream->add(DataItem(current_value, timestamp));
     }
     assert(timestamp > 0);

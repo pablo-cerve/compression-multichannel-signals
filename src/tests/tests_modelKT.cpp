@@ -26,8 +26,6 @@ void TestsModelKT::getProbabilityTest(){
 };
 
 void TestsModelKT::assertProb(prob p, int low, int high, int count){
-    // std::cout << low << " " << high << " " << count << std::endl;
-    // std::cout << p.low << " " << p.high << " " << p.count << std::endl;
     assert(p.low == low);
     assert(p.high == high);
     assert(p.count == count);

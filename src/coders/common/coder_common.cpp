@@ -36,8 +36,8 @@ void CoderCommon::codeWindowParameter() {
 Dataset* CoderCommon::code(){
     data_rows_count = HeaderCoder(input_csv, this).codeHeader(dataset);
 
-    bool is_lossless = Constants::isLosslessCoder(coder_name);
-    codeDataRows(is_lossless);
+    bool mask_mode = Constants::maskModeCoder(coder_name);
+    codeDataRows(mask_mode);
 
     dataset->printBits();
     closeFiles();
@@ -103,10 +103,9 @@ void CoderCommon::codeValueRaw(std::string x){
     int value;
     try {
         value = codeValue(x);
-        // std::cout << "codeValue(" << x << ") = " << value << std::endl;
     }
     catch( const std::invalid_argument& e ){
-        std::cout << "CoderCommon::codeValueRaw: " << e.what() << std::endl;
+        std::cout << "ERROR: CoderCommon::codeValueRaw: " << e.what() << std::endl;
         delete input_csv;
         delete output_file;
         exit(-1);

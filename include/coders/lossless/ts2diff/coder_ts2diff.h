@@ -17,7 +17,7 @@ private:
     bool read_first_value;
     int previous_value;
     int no_data_value;
-    
+
     TS2DiffWindow* window;
 
     void codeColumnBefore() override;

@@ -8,8 +8,9 @@
 class Tests {
 
 public:
-    static void runAll();
-
+    static void runAll(std::string full_dataset_path);
+private:
+    static bool printError(std::exception e);
 };
 
 #endif //CPP_PROJECT_TESTS_H

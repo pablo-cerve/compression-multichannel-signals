@@ -274,27 +274,22 @@ set(TESTS_UTILS_H_FILES1 ${TESTS_UTILS_H_DIR}/tests_string_utils.h ${TESTS_UTILS
 set(TESTS_UTILS_SRC_FILES0 ${TESTS_UTILS_SRC_DIR}/tests_datetime_utils.cpp ${TESTS_UTILS_SRC_DIR}/tests_math_utils.cpp)
 set(TESTS_UTILS_SRC_FILES1 ${TESTS_UTILS_SRC_DIR}/tests_string_utils.cpp ${TESTS_UTILS_SRC_DIR}/tests_vector_utils.cpp)
 
-set(TESTS_H_FILES0 ${TESTS_H_DIR}/tests_line.h ${TESTS_H_DIR}/tests_utils.h)
-set(TESTS_H_FILES1 ${TESTS_H_DIR}/tests_coders_utils.h)
-set(TESTS_H_FILES2 ${TESTS_H_DIR}/tests_bit_stream.h)
-set(TESTS_H_FILES3 ${TESTS_H_DIR}/tests.h ${TESTS_H_DIR}/tests_modelKT.h ${TESTS_H_DIR}/tests_examples.h)
+set(TESTS_H_FILES0 ${TESTS_H_DIR}/tests_line.h ${TESTS_H_DIR}/tests_bit_stream.h)
+set(TESTS_H_FILES1 ${TESTS_H_DIR}/tests.h ${TESTS_H_DIR}/tests_modelKT.h ${TESTS_H_DIR}/tests_examples.h)
 
-set(TESTS_SRC_FILES0 ${TESTS_SRC_DIR}/tests_line.cpp ${TESTS_SRC_DIR}/tests_utils.cpp)
-set(TESTS_SRC_FILES1 ${TESTS_SRC_DIR}/tests_coders_utils.cpp)
-set(TESTS_SRC_FILES2 ${TESTS_SRC_DIR}/tests_bit_stream.cpp)
-set(TESTS_SRC_FILES3 ${TESTS_SRC_DIR}/tests.cpp ${TESTS_SRC_DIR}/tests_modelKT.cpp ${TESTS_SRC_DIR}/tests_examples.cpp)
+set(TESTS_SRC_FILES0 ${TESTS_SRC_DIR}/tests_line.cpp ${TESTS_SRC_DIR}/tests_bit_stream.cpp)
+set(TESTS_SRC_FILES1 ${TESTS_SRC_DIR}/tests.cpp ${TESTS_SRC_DIR}/tests_modelKT.cpp ${TESTS_SRC_DIR}/tests_examples.cpp)
 
-
-set(TESTS_H_FILES ${TESTS_H_FILES0} ${TESTS_H_FILES1} ${TESTS_H_FILES2} ${TESTS_H_FILES3} ${TESTS_UTILS_H_FILES0} ${TESTS_UTILS_H_FILES1})
-set(TESTS_SRC_FILES ${TESTS_SRC_FILES0} ${TESTS_SRC_FILES1} ${TESTS_SRC_FILES2} ${TESTS_SRC_FILES3} ${TESTS_UTILS_SRC_FILES0} ${TESTS_UTILS_SRC_FILES1})
+set(TESTS_H_FILES ${TESTS_H_FILES0} ${TESTS_H_FILES1} ${TESTS_UTILS_H_FILES0} ${TESTS_UTILS_H_FILES1})
+set(TESTS_SRC_FILES ${TESTS_SRC_FILES0} ${TESTS_SRC_FILES1} ${TESTS_UTILS_SRC_FILES0} ${TESTS_UTILS_SRC_FILES1})
 ### TESTS END ##########################################################################################################
 
 ### UTILS BEGIN ########################################################################################################
 set(UTILS_H_FILES0 ${UTILS_H_DIR}/datetime_utils.h ${UTILS_H_DIR}/line_utils.h ${UTILS_H_DIR}/math_utils.h)
-set(UTILS_H_FILES1 ${UTILS_H_DIR}/os_utils.h ${UTILS_H_DIR}/string_utils.h ${UTILS_H_DIR}/vector_utils.h ${UTILS_H_DIR}/conversor.h)
+set(UTILS_H_FILES1 ${UTILS_H_DIR}/string_utils.h ${UTILS_H_DIR}/vector_utils.h ${UTILS_H_DIR}/conversor.h)
 
 set(UTILS_SRC_FILES0 ${UTILS_SRC_DIR}/datetime_utils.cpp ${UTILS_SRC_DIR}/line_utils.cpp ${UTILS_SRC_DIR}/math_utils.cpp)
-set(UTILS_SRC_FILES1 ${UTILS_SRC_DIR}/os_utils.cpp ${UTILS_SRC_DIR}/string_utils.cpp ${UTILS_SRC_DIR}/conversor.cpp)
+set(UTILS_SRC_FILES1 ${UTILS_SRC_DIR}/string_utils.cpp ${UTILS_SRC_DIR}/conversor.cpp)
 
 set(UTILS_H_FILES ${UTILS_H_FILES0} ${UTILS_H_FILES1})
 set(UTILS_SRC_FILES ${UTILS_SRC_FILES0} ${UTILS_SRC_FILES1})

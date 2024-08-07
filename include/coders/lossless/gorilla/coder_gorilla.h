@@ -13,7 +13,7 @@ public:
 
 private:
     static constexpr uint32_t kMaxLeadingZerosLength = (1 << GorillaConstants::kLeadingZerosLengthBits) - 1;
-    
+
     uint64_t previousValue_;
     uint8_t previousValueLeadingZeros_;
     uint8_t previousValueTrailingZeros_;

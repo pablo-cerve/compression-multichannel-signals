@@ -9,7 +9,7 @@
 #include "vector_utils.h"
 #include "decoder_apca.h"
 
-void DecoderGAMPS::decodeDataRows(bool is_lossless_){
+void DecoderGAMPS::decodeDataRows(bool mask_mode_){
     int total_columns = dataset->data_columns_count + 1;
     columns = std::vector<std::vector<std::string>> (total_columns);
 
@@ -28,18 +28,12 @@ void DecoderGAMPS::decodeDataRows(bool is_lossless_){
 
 void DecoderGAMPS::decodeTimeDeltaColumn(){
     int column_index = 0;
-#if COUT
-    std::cout << "decode column_index " << column_index << std::endl;
-#endif
     dataset->setColumn(column_index);
     std::vector<std::string> column = TimeDeltaDecoder::decode(this);
     columns.at(0) = column;
 }
 
 void DecoderGAMPS::decodeGroup(){
-#if COUT
-    std::cout << "decode group " << group_index << "/" << total_groups << std::endl;
-#endif
     decodeMappingTable();
     decodeNoDataColumns();
     decodeGAMPSColumns();
@@ -54,9 +48,6 @@ void DecoderGAMPS::decodeMappingTable(){
         vector.push_back(base_column_index);
     }
     mapping_table = new MappingTable(vector);
-#if COUT
-    mapping_table->print(total_groups, group_index);
-#endif
 }
 
 void DecoderGAMPS::decodeNoDataColumns(){
@@ -74,9 +65,6 @@ void DecoderGAMPS::decodeGAMPSColumns(){
         if (!mapping_table->isBaseColumn(table_index)){ continue; }
 
         column_index = MappingTable::mapIndex(table_index, total_groups, group_index);
-    #if COUT
-        std::cout << "decode base  signal i = " << column_index << std::endl;
-    #endif
         dataset->setColumn(column_index);
 
         std::vector<int> ratio_columns = mapping_table->ratioColumns(table_index);
@@ -88,9 +76,6 @@ void DecoderGAMPS::decodeGAMPSColumns(){
         for (int j = 0; j < ratio_columns.size(); j++){
             table_index = ratio_columns.at(j);
             column_index = MappingTable::mapIndex(table_index, total_groups, group_index);
-        #if COUT
-            std::cout << "    decode ratio signal i = " << column_index << std::endl;
-        #endif
             dataset->setColumn(column_index);
             std::vector<std::string> ratio_column = decodeRatioColumn(base_column_double);
             columns.at(column_index) = ratio_column;
@@ -129,8 +114,6 @@ std::vector<std::string> DecoderGAMPS::decodeBaseColumn(std::vector<double> & ba
 
 std::vector<std::string> DecoderGAMPS::decodeRatioColumn(std::vector<double> base_column_double){
     std::vector<double> read_column = decodeGAMPSRatioColumn();
-    //std::cout << "read_column.size() = " << read_column.size() << std::endl;
-    //std::cout << "data_rows_count = " << data_rows_count << std::endl;
     assert(read_column.size() == data_rows_count);
 
     std::vector<std::string> ratio_column;

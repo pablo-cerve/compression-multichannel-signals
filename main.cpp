@@ -11,9 +11,11 @@ int main(int argc, char *argv[]){
         MainHelper::checkAction(action); // check that action is "code", "decode" or "test"
 
         if (action == "test") {
-            if (argc > 2) { throw std::invalid_argument("Too many arguments for test."); }
+            if (argc > 3) { throw std::invalid_argument("Too many arguments for test."); }
 
-            Tests::runAll();
+            std::string full_dataset_path;
+            if (argc == 3){ full_dataset_path = argv[2]; }
+            Tests::runAll(full_dataset_path);
             return 0;
         }
 
@@ -42,14 +44,14 @@ int main(int argc, char *argv[]){
 
         bool is_lossless = Constants::isLosslessCoder(coder_name);
         bool requires_window_size = Constants::requiresWindowSize(coder_name);
-        
+
         if (is_lossless) {
             if (!requires_window_size){
                 if (argc > 5) { throw std::invalid_argument("Too many arguments for code with " + coder_name + "."); }
                 MainHelper::code(coder_name, full_input_path, full_output_path, window_size, epsilons_vector);
                 return 0;
             }
-            else if (argc < 6) { 
+            else if (argc < 6) {
                 throw std::invalid_argument("Missing arguments for code with " + coder_name + ".");
             }
         }

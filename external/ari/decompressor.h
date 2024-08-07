@@ -41,7 +41,7 @@ THE SOFTWARE.
 
 //
 // The arithmetic decompressor is a general purpose decompressor that
-// is parameterized on the types of the input, output, and 
+// is parameterized on the types of the input, output, and
 // model objects, in an attempt to make it as flexible as
 // possible. It is easiest to use by calling the compress()
 // convenience function found at the bottom of this header file
@@ -51,7 +51,7 @@ THE SOFTWARE.
 // function. Both of these functions should throw exceptions on
 // errors. We expect the EOF to be embedded in the compressed
 // stream, so it needs to be extracted by the decoder. If the
-// compression goes awry, the get_bit() function will be 
+// compression goes awry, the get_bit() function will be
 // repeatedly called on EOF(), in which case it would be good
 // for it to return an error.
 //
@@ -61,7 +61,7 @@ class decompressor
   typedef typename MODEL::CODE_VALUE CODE_VALUE;
   typedef typename MODEL::prob prob;
 public :
-  decompressor(INPUT &input, OUTPUT &output, MODEL &model ) 
+  decompressor(INPUT &input, OUTPUT &output, MODEL &model )
   : m_input(input),
     m_output(output),
     m_model(model)
@@ -80,7 +80,6 @@ public :
       value <<= 1;
       int bit = m_input.get_bit() ? 1 : 0;
       value += bit;
-      // std::cout << (bit ? "decompressor 1" : "decompressor 0") << std::endl;
     }
     for ( ; ; ) {
       CODE_VALUE range = high - low + 1;
@@ -89,11 +88,9 @@ public :
       prob p = m_model.getChar( scaled_value, c );
       m_output.putByte(c);
       if (m_output.reset_model){
-          // std::cout << "m_output.reset_model" << std::endl;
           m_model.reset();
       }
       else if (m_output.eof){
-          // std::cout << "m_output.eof" << std::endl;
           m_input.finishDecoding();
           return 0;
       }
@@ -102,7 +99,7 @@ public :
       if ( c > 0x20 && c <= 0x7f )
         log << "(" << char(c) << ")";
       log << " 0x" << low << " 0x" << high << " => ";
-#endif 
+#endif
       high = low + (range*p.high)/p.count -1;
       low = low + (range*p.low)/p.count;
 #ifdef LOG
@@ -131,7 +128,7 @@ public :
 #ifdef LOG
       log << std::hex << "0x" << std::setw(2) << std::setfill('0') << 256;
       log << " 0x" << low << " 0x" << high << "\n";
-#endif 
+#endif
     return 0;
   }
 private :

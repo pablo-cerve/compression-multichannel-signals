@@ -247,7 +247,6 @@ int GAMPS_Computation::statGroup(GAMPSInput* gampsInputList)
 	// Apply APCA
 	for(int j = 0; j< numOfStream;j++)
 	{
-		// std::cout << "j = " << j << std::endl;
 		// choose one signal => base signal, compress it and push into base signal bucket list
 		CDataStream* baseSignal = gampsInputList->getOriginalStreams()->getDataAt(j);
 
@@ -255,8 +254,6 @@ int GAMPS_Computation::statGroup(GAMPSInput* gampsInputList)
 		// baseSignal->statistic();
 		// eps = m_dEps * (baseSignal->getMax() - baseSignal->getMin());
 		eps1 = 0.4 * eps;
-		// std::cout << "  eps = " << eps << std::endl;
-		// std::cout << "  eps1 = " << eps1 << std::endl;
 
 		DynArray<GAMPSEntry>* listBaseSignalBucket = compress_APCA(baseSignal,eps1);
 		listBucket[j] = listBaseSignalBucket;
@@ -264,7 +261,6 @@ int GAMPS_Computation::statGroup(GAMPSInput* gampsInputList)
 
 		for(int i = 0; i < numOfStream; i++)
 		{
-			// std::cout << "  i = " << i << std::endl;
 			/*
 			foreach signal:
 				+ calculate ratio with base signal
@@ -276,7 +272,6 @@ int GAMPS_Computation::statGroup(GAMPSInput* gampsInputList)
 
 			eps2 = this->computeEps2(eps,eps1,c1,c2);
 			//eps2 = (eps2 < 0) ? 0 : round(eps2);
-			// std::cout << "    eps2 = " << eps2 << std::endl;
 			DynArray<GAMPSEntry> *listRatioBucket = this->compress_APCA(*listComputeRatioSignal,eps2);
 			int pos = j* numOfStream + i;
 			listRatioSignalBucket[pos] = listRatioBucket;
@@ -346,7 +341,6 @@ int GAMPS_Computation::statGroup(GAMPSInput* gampsInputList)
 	delete[] listBucket;
 	delete[] listRatioSignalBucket;
 
-	std::cout << "totalCost = " << totalCost << std::endl;
 	return totalCost;
 }
 
@@ -393,8 +387,6 @@ void GAMPS_Computation:: computeOutput(DynArray<GAMPSEntry>** baseBucketList, Dy
 		}
 	}
 
-	// std::cout << "baseCount = " << baseCount << std::endl;
-	// std::cout << "ratioCount = " << ratioCount << std::endl;
 	m_pGampsOutput->setResultBaseSignal(resultBaseSignal);
 	m_pGampsOutput->setResultBaseSignalEpsilon(resultBaseSignalEpsilon);
 	m_pGampsOutput->setResultRatioSignal(resultRatioSignal);
@@ -405,8 +397,6 @@ void GAMPS_Computation::print(DynArray<GAMPSEntry>* array, int spaces){
     int inputCount = array->size();
     for (int i=0; i < inputCount; i++){
         GAMPSEntry baseEntry = array->getAt(i);
-        for(int j=0; j < spaces; j++) { std::cout << "    "; }
-        std::cout << "ts = " << baseEntry.endingTimestamp << ", val = " << baseEntry.value << std::endl;
     }
 }
 

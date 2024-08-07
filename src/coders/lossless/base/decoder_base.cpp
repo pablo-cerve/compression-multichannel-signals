@@ -3,11 +3,11 @@
 #include "assert.h"
 #include "vector_utils.h"
 
-std::vector<std::string> DecoderBase::decodeDataColumn(bool mask_mode){
-    return decodeDataColumnAux(mask_mode, 0);
+std::vector<std::string> DecoderBase::decodeDataColumn(bool mask_mode_){
+    return decodeDataColumnAux(0);
 }
 
-std::vector<std::string> DecoderBase::decodeDataColumnAux(bool mask_mode, int begin_row_index){
+std::vector<std::string> DecoderBase::decodeDataColumnAux(int begin_row_index){
     std::vector<std::string> column;
     row_index = begin_row_index;
 
@@ -20,8 +20,7 @@ std::vector<std::string> DecoderBase::decodeDataColumnAux(bool mask_mode, int be
 }
 
 std::vector<std::string> DecoderBase::decodeTimeDelta(DecoderBase* decoder){
-    bool mask_mode = false;
-    std::vector<std::string> column = decoder->decodeDataColumnAux(mask_mode, 1);
+    std::vector<std::string> column = decoder->decodeDataColumnAux(1);
     column.insert(column.begin(), "0"); // add "0" in the beginning
 
     for (int i=0; i < column.size(); i++){

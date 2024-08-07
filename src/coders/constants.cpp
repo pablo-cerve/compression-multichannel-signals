@@ -57,6 +57,11 @@ bool Constants::isLosslessCoder(std::string coder_name) {
     return VectorUtils::vectorIncludesString(lossless_coders, coder_name);
 }
 
+bool Constants::maskModeCoder(std::string coder_name) {
+    std::vector<std::string> no_mask_mode_coders = {"Base"};
+    return !VectorUtils::vectorIncludesString(no_mask_mode_coders, coder_name);
+}
+
 bool Constants::requiresWindowSize(std::string coder_name) {
     std::vector<std::string> coders_without_window = {"Base", "Gorilla"};
     return !VectorUtils::vectorIncludesString(coders_without_window, coder_name);

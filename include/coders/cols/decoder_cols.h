@@ -8,13 +8,13 @@
 class DecoderCols: public DecoderCommon {
 
 private:
-    void decodeDataRows(bool is_lossless_) override;
+    void decodeDataRows(bool mask_mode_) override;
 
     std::vector<std::string> decodeColumn();
     virtual std::vector<std::string> decodeDataColumn(bool mask_mode) = 0;
 
 protected:
-    bool is_lossless = false;
+    bool mask_mode = true;
     int column_index;
     Column* column;
 

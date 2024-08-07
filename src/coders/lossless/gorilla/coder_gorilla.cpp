@@ -5,14 +5,18 @@
 
 void CoderGorilla::codeColumnBefore() {
     read_first_value = false;
-    no_data_value = dataset->column_code-> range->end + 1;
+    if (!mask_mode) {
+        no_data_value = dataset->column_code-> range->end + 1;
+    }
 }
 
 void CoderGorilla::codeColumnWhile(std::string csv_value){
     int value;
-    if (Constants::isNoData(csv_value)) { 
+    if (Constants::isNoData(csv_value)) {
+        if (mask_mode) { return; } // skip gap
+
         value = no_data_value;
-    } 
+    }
     else {
         value = Conversor::stringToDouble(csv_value);
     }
@@ -30,7 +34,7 @@ void CoderGorilla::codeColumnWhile(std::string csv_value){
         return;
     }
 
-    // The following code is based on 
+    // The following code is based on
     // https://github.com/facebookarchive/beringei/blob/75c3002b179d99c8709323d605e7d4b53484035c/beringei/lib/TimeSeriesStream.cpp#L178
     //
     uint64_t p = (uint64_t) value;
@@ -93,7 +97,7 @@ void CoderGorilla::codeColumnWhile(std::string csv_value){
         previousValueTrailingZeros_ = trailingZeros;
         previousValueLeadingZeros_ = leadingZeros;
     }
-    
+
     previousValue_ = p;
 }
 
@@ -107,24 +111,24 @@ std::vector<int> CoderGorilla::codeTimeDelta(CoderCols* coder){
     bool first_value = true;
     int previous_delta = 0; // t_(n−1) − t_(n−2)
     int current_delta = 0; // t_n − t_(n−1)
-    
+
     while (input_csv->continue_reading){
         std::string csv_value = input_csv->readNextValue();
         int csv_value_int = Conversor::stringToInt(csv_value);
         time_delta_vector.push_back(csv_value_int);
-        
+
         if (first_value){
             // the first value is always 0, no need to encode anything
             assert(csv_value == "0");
             first_value = false;
             continue;
         }
-        
+
         current_delta = csv_value_int; // current_delta must be >= 0
         codeD(coder, current_delta, previous_delta);
         previous_delta = current_delta; // previous_delta must be >= 0
     }
-    return time_delta_vector; 
+    return time_delta_vector;
 }
 
 void CoderGorilla::codeD(CoderCols* coder, int current_delta, int previous_delta){
@@ -162,7 +166,7 @@ void CoderGorilla::codeD(CoderCols* coder, int current_delta, int previous_delta
         coder->codeInt(d, 12);
         return;
     }
-    
+
     // (f) Otherwise store ‘1111’ followed by D using 32 bits
     // assert(d >= -2147483647 && d <= 2147483648);
     d += 2147483647; // d in [0, 4294967295] = [0, 2**32 - 1]

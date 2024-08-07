@@ -15,7 +15,7 @@ void DecoderPWLH::setIntegerMode(){
     integer_mode = coder_name == "PWLH*Int";
 }
 
-std::vector<std::string> DecoderPWLH::decodeDataColumn(bool mask_mode){
+std::vector<std::string> DecoderPWLH::decodeDataColumn(bool mask_mode_){
     column = new Column(data_rows_count, mask->total_data, mask->total_no_data);
 
     while (column->notFinished()){
@@ -70,4 +70,3 @@ void DecoderPWLH::decodeWindowInt(int window_size){
         column->addData(value);
     }
 }
-

@@ -4,17 +4,15 @@
 #include <cfloat>
 #include "assert.h"
 #include <iostream>
-#include "tests_utils.h"
 
-const std::string TestsBitStream::TESTS_BIT_STREAM_PATH = TestsUtils::OUTPUT_PATH + "/tests_bit_stream";
 
-void TestsBitStream::runAll(){
-    std::cout << "  floatTest();" << std::endl;  floatTest();
-    std::cout << "  doubleTest();" << std::endl; doubleTest();
+void TestsBitStream::runAll(std::string full_dataset_path){
+    std::cout << "  floatTest" << std::endl;  floatTest(full_dataset_path);
+    std::cout << "  doubleTest" << std::endl; doubleTest(full_dataset_path);
 }
 
-void TestsBitStream::floatTest(){
-    Path coded_path = Path(TESTS_BIT_STREAM_PATH, "testFloat.code");
+void TestsBitStream::floatTest(std::string full_dataset_path){
+    Path coded_path = Path(full_dataset_path, "testFloat.code");
     BitStreamWriter* bit_stream_writer = new BitStreamWriter(coded_path);
     float a = 0.238728932739; bit_stream_writer->pushFloat(a);
     float b = 0.2893232; bit_stream_writer->pushFloat(b);
@@ -32,8 +30,8 @@ void TestsBitStream::floatTest(){
     BitStreamUtils::removeFile(coded_path);
 }
 
-void TestsBitStream::doubleTest(){
-    Path coded_path = Path(TESTS_BIT_STREAM_PATH, "testDouble.code");
+void TestsBitStream::doubleTest(std::string full_dataset_path){
+    Path coded_path = Path(full_dataset_path, "testDouble.code");
     BitStreamWriter* bit_stream_writer = new BitStreamWriter(coded_path);
     double a = 0.238728932739; bit_stream_writer->pushDouble(a);
     double b = 0.2893232; bit_stream_writer->pushDouble(b);

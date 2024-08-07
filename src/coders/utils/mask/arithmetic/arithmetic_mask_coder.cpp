@@ -5,7 +5,6 @@
 #include "coder_output.h"
 #include "modelKT.h"
 
-#include "tests_utils.h"
 #include "decoder_input.h"
 #include "decoder_output.h"
 #include "decompressor.h"
@@ -23,9 +22,7 @@ std::vector<int> ArithmeticMaskCoder::code(){
 }
 
 void ArithmeticMaskCoder::flush(){
-    // std::cout << "C1 >> coder->flushByte();" << std::endl;
     coder->flushByte();
-    // std::cout << "C1 >> coder->flushByte();" << std::endl;
 }
 
 std::vector<int> ArithmeticMaskCoder::callCompress(){

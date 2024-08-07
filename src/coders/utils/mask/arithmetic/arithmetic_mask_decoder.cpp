@@ -18,9 +18,7 @@ std::vector<Mask*> ArithmeticMaskDecoder::decode(){
 }
 
 void ArithmeticMaskDecoder::flush(){
-    // std::cout << "D1 >> decoder->flushByte();" << std::endl;
     decoder->flushByte();
-    // std::cout << "D1 >> decoder->flushByte();" << std::endl;
 }
 
 std::vector<Mask*> ArithmeticMaskDecoder::callDecompress(){

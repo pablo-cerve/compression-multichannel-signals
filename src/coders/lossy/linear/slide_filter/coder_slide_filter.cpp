@@ -37,7 +37,6 @@ void CoderSlideFilter::codeColumnAfter() {
 }
 
 void CoderSlideFilter::codeEntry(bool connToFollow, double timestamp, double value){
-//    std::cout << connToFollow << " " << (int) timestamp << " " << value << std::endl;
     codeBool(connToFollow);
     codeFloat(timestamp);
     codeFloat(value);
@@ -252,7 +251,6 @@ void CoderSlideFilter::recording_mechanism(int& position)
         codeEntry(true, t, m_curG.getValue(t));
         codeEntry(false, item.timestamp, item.value);
         position++;
-//        std::cout << "  last_recording1 = (" << item.timestamp << ", " << item.value << ")" << std::endl;
     }
         //position == inputSize --> Create last recording
     else
@@ -260,7 +258,6 @@ void CoderSlideFilter::recording_mechanism(int& position)
         DataItem item = m_pSFData->getAt(position - 1);
         double t = item.timestamp;
         codeEntry(false, t, m_curG.getValue(t));
-//        std::cout << "  last_recording2 = (" << item.timestamp << ", " << m_curG.getValue(t) << ")" << std::endl;
     }
 }
 

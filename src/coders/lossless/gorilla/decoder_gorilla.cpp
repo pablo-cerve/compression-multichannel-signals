@@ -4,11 +4,13 @@
 #include "gorilla_constants.h"
 #include "conversor.h"
 
-std::vector<std::string> DecoderGorilla::decodeDataColumn(bool mask_mode){
+std::vector<std::string> DecoderGorilla::decodeDataColumn(bool mask_mode_){
     std::vector<std::string> column;
     row_index = 0;
     read_first_value = false;
-    no_data_value = dataset->column_code-> range->end + 1;
+    if (!mask_mode){
+        no_data_value = dataset->column_code-> range->end + 1;
+    }
 
     int unprocessed_rows = data_rows_count;
 #if CHECKS
@@ -16,14 +18,20 @@ std::vector<std::string> DecoderGorilla::decodeDataColumn(bool mask_mode){
 #endif
 
     while (unprocessed_rows > 0) {
+        if (mask_mode && mask->isNoData()) {
+            column.push_back(Constants::NO_DATA);
+            row_index++; unprocessed_rows--;
+            continue;
+        }
         double value;
+
         if (!read_first_value){
-            read_first_value = true;    
+            read_first_value = true;
             std::string csv_value = decodeValueRaw();
             column.push_back(csv_value);
             row_index++; unprocessed_rows--;
 
-            if (Constants::isNoData(csv_value)) { 
+            if (!mask_mode && Constants::isNoData(csv_value)) {
                 value = no_data_value;
             }
             else{
@@ -40,7 +48,7 @@ std::vector<std::string> DecoderGorilla::decodeDataColumn(bool mask_mode){
         value = decodeNextValue();
         int int_value = value - dataset->offset();
         std::string push_value;
-        if (int_value == no_data_value){
+        if (!mask_mode && int_value == no_data_value){
             push_value = Constants::NO_DATA;
         }
         else{
@@ -54,7 +62,7 @@ std::vector<std::string> DecoderGorilla::decodeDataColumn(bool mask_mode){
 
 
 double DecoderGorilla::decodeNextValue(){
-    // The following code is based on 
+    // The following code is based on
     // https://github.com/facebookarchive/beringei/blob/75c3002b179d99c8709323d605e7d4b53484035c/beringei/lib/TimeSeriesStream.cpp#L282
     //
     uint64_t nonZeroValue = decodeBool();
@@ -73,7 +81,7 @@ double DecoderGorilla::decodeNextValue(){
     } else {
         uint64_t leadingZeros = decodeInt(GorillaConstants::kLeadingZerosLengthBits);
         uint64_t blockSize = decodeInt(GorillaConstants::kBlockSizeLengthBits) + GorillaConstants::kBlockSizeAdjustment;
-        
+
         previousTrailingZeros = GorillaConstants::kValue - blockSize - leadingZeros;
         xorValue = decodeInt(blockSize);
 

@@ -18,9 +18,9 @@ int DecoderInput::get_bit(){
     }
     else if (current_burst == bit){
         current_burst_count++;
-        if (previous_burst && current_burst_count == EOS_LENGTH){
-//            std::cout << "THIS IS THE END..." << std::endl;
-        }
+        // if (previous_burst && current_burst_count == EOS_LENGTH){
+        //     // END
+        // }
     }
     else { // current_burst != bit
         if (current_burst_count == EOS_LENGTH) {
@@ -40,7 +40,6 @@ int DecoderInput::get_bit(){
 }
 
 void DecoderInput::finishDecoding(){
-    // std::cout << "finishDecoding" << std::endl;
     while (!(previous_burst && current_burst_count == EOS_LENGTH)){
         get_bit();
     }

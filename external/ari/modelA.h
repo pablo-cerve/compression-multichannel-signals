@@ -37,10 +37,10 @@ THE SOFTWARE.
 #include <stdexcept>
 #include "model_metrics.h"
 
-template<typename CODE_VALUE_ = unsigned int, 
+template<typename CODE_VALUE_ = unsigned int,
          int CODE_VALUE_BITS_ = (std::numeric_limits<CODE_VALUE_>::digits + 3) / 2,
          int FREQUENCY_BITS_ = std::numeric_limits<CODE_VALUE_>::digits - CODE_VALUE_BITS_>
-struct modelA : public model_metrics<CODE_VALUE_, CODE_VALUE_BITS_, FREQUENCY_BITS_> 
+struct modelA : public model_metrics<CODE_VALUE_, CODE_VALUE_BITS_, FREQUENCY_BITS_>
 {
   typedef model_metrics<CODE_VALUE_, CODE_VALUE_BITS_, FREQUENCY_BITS_> metrics;
   typedef typename metrics::prob prob;
@@ -80,16 +80,11 @@ struct modelA : public model_metrics<CODE_VALUE_, CODE_VALUE_BITS_, FREQUENCY_BI
   }
   virtual void frozen()
   {
-    // std::cout << "Frozen at: " << m_bytesProcessed << "\n";
-    // std::cout << "Before = "; printCumulativeFrequency(); std::cout << std::endl;
-
     // cumulative_frequency[SYMBOL_COUNT] is an even number >> 2
     cumulative_frequency[SYMBOL_COUNT] /= 2;
 
     // cumulative_frequency[1] is an odd number >= 1
     cumulative_frequency[1] = update_cumulative_freq(cumulative_frequency[1]);
-
-    // std::cout << "After = "; printCumulativeFrequency(); std::cout << std::endl;
   }
   //
   // PRE: value is an odd number >= 1

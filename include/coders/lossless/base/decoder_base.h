@@ -8,11 +8,11 @@ class DecoderBase: public DecoderCols {
 
 public:
     using DecoderCols::DecoderCols;
-    std::vector<std::string> decodeDataColumn(bool mask_mode) override;
+    std::vector<std::string> decodeDataColumn(bool mask_mode_) override;
     static std::vector<std::string> decodeTimeDelta(DecoderBase* decoder);
 
 private:
-    std::vector<std::string> decodeDataColumnAux(bool mask_mode, int begin_row_index);
+    std::vector<std::string> decodeDataColumnAux(int begin_row_index);
 
 };
 

@@ -7,14 +7,14 @@
 #include "time_delta_coder.h"
 #include "coder_utils.h"
 
-void CoderCols::codeDataRows(bool is_lossless_){
-    is_lossless = is_lossless_;
+void CoderCols::codeDataRows(bool mask_mode_){
+    mask_mode = mask_mode_;
     int total_columns = dataset->data_columns_count + 1;
 
     column_index = 0;
     codeColumn();
 
-    if (!is_lossless){
+    if (mask_mode){
         ArithmeticMaskCoder* amc = new ArithmeticMaskCoder(this, dataset->data_columns_count);
         total_data_rows_vector = amc->code();
     }
@@ -25,9 +25,6 @@ void CoderCols::codeDataRows(bool is_lossless_){
 }
 
 void CoderCols::codeColumn() {
-#if COUT
-    std::cout << "ccode column_index " << column_index << std::endl;
-#endif
     dataset->setColumn(column_index);
     if (column_index == 0) {
         dataset->setMode("DATA");
@@ -35,7 +32,7 @@ void CoderCols::codeColumn() {
         return;
     }
 
-    if (!is_lossless){
+    if (mask_mode){
         total_data_rows = total_data_rows_vector.at(column_index - 1);
     }
     dataset->setMode("DATA");

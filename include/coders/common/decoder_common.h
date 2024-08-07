@@ -11,7 +11,7 @@
 class DecoderCommon {
 
 private:
-    virtual void decodeDataRows(bool is_lossless_) = 0;
+    virtual void decodeDataRows(bool mask_mode_) = 0;
     std::string decodeValue(int y);
     int decodeRaw();
     void closeFiles();

@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 //
 // The arithmetic compressor is a general purpose compressor that
-// is parameterized on the types of the input, output, and 
+// is parameterized on the types of the input, output, and
 // model objects, in an attempt to make it as flexible as
 // possible. It is easiest to use by calling the compress()
 // convenience function found at the bottom of this header file
@@ -55,7 +55,7 @@ class compressor
   typedef typename MODEL::CODE_VALUE CODE_VALUE;
   typedef typename MODEL::prob prob;
 public :
-  compressor(INPUT &input, OUTPUT &output, MODEL &model ) 
+  compressor(INPUT &input, OUTPUT &output, MODEL &model )
   : m_input(input),
     m_output(output),
     m_model(model)
@@ -107,8 +107,8 @@ public :
           put_bit_plus_pending(1, pending_bits);
         else if ( low >= MODEL::ONE_FOURTH && high < MODEL::THREE_FOURTHS ) {
           pending_bits++;
-          low -= MODEL::ONE_FOURTH;  
-          high -= MODEL::ONE_FOURTH;  
+          low -= MODEL::ONE_FOURTH;
+          high -= MODEL::ONE_FOURTH;
         } else
           break;
         high <<= 1;
@@ -118,11 +118,9 @@ public :
         low &= MODEL::MAX_CODE;
       }
       if (m_input.reset_model){
-          // std::cout << "m_input.reset_model" << std::endl;
           m_model.reset();
       }
       else if (m_input.eof) {
-          // std::cout << "m_input.eof" << std::endl;
           break;
       }
     }
@@ -138,7 +136,6 @@ public :
 
   inline void put_bit_plus_pending(bool bit, int &pending_bits)
   {
-    // std::cout << "put_bit_plus_pending(" << (bit ? "1" : "0") << ", " << pending_bits << ")" << std::endl;
     m_output.put_bit(bit);
     for ( int i = 0 ; i < pending_bits ; i++ )
       m_output.put_bit(!bit);

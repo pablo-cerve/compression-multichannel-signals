@@ -4,20 +4,28 @@
 
 #include <iostream>
 #include <vector>
+#include "path.h"
 
 
 class TestsExamples {
 public:
-    static void runAll();
+    static void runAll(std::string full_dataset_path);
+    TestsExamples(std::string full_dataset_path_);
 
 private:
-    static void commonTest(std::string coder_name, int window_size);
-    static void testLossy(std::string input_filename, std::string coder_name, int window_size);
-    static void testLossless(std::string input_filename, std::string coder_name, int window_size);
+    std::string full_dataset_path;
+    Path original_file_path;
+    int window_size;
+    std::vector<int> lossless_epsilons_vector;
+    std::vector<int> lossy_epsilons_vector;
 
-    static const std::string EXAMPLES_PATH;
-    static const std::string EXPECTED_PATH;
-    static const std::string OUTPUT_PATH;
+    void commonTest(std::string coder_name);
+    void testLossless(std::string coder_name);
+    void testLossy(std::string coder_name);
+
+    static Path codedFilePath(std::string folder, Path file_path, std::string coder_name);
+    static Path decodedFilePath(std::string folder, Path file_path, std::string coder_name);
+    static void compareFiles(Path path1, Path path2);
 
 };
 

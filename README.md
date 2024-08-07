@@ -12,8 +12,9 @@ $ [CMAKE_PATH]/cmake --build . --target run -- -j 4
 ```
 2. Run the tests
 ```
-$ [PROJECT_PATH]/run test
+$ [PROJECT_PATH]/run test [DATASETS_PATH]
 ```
+Argument `[DATASETS_PATH]` is not required. When it is present, additional tests that code and decode certain dataset file will run.
 
 
 ## [3] Code and Decode Dataset Files
@@ -31,7 +32,7 @@ All the arguments are required:
 - `[w]`: value for the window size parameter *w*, e.g. `4`, `8`, `16`, `32`, `64`, `128`, `256`
 - `[ε1] [ε2] ... [εn]`: `εi` represents the (non-negative integer) error bound ε (as defined in Definition 1.1) for data column `i`. The number of error bounds must match the number of data columns in the input dataset file to be coded.
 
-The output shows the total number of bits of the coded file, detailing how many bits are used for encoding the header, the timestamp column and the data columns. The number of bits used for encoding the data columns are grouped by data type.  In every case the number of bits used for encoding the gap locations (Line 4 in Figure 1) and the rest of the data (Line 6 or 8 -depending on the coder- in Figure 1) are shown.
+The output shows the total number of bits of the coded file, detailing how many bits are used for encoding the header, the timestamp column and the data columns. The number of bits used for encoding the data columns are grouped by data type.  In every case the number of bits used for encoding the gap locations (Line 4 in Algorithm 1) and the rest of the data (Line 6 or 8 -depending on the coder- in Algorithm 1) are shown.
 
 #### [3.1.1] Code with error parameter *e*
 Instead of passing arguments `error_mode=epsilon [ε1] [ε2] ... [εn]`, one can pass arguments `error_mode=e [e]`
@@ -55,7 +56,7 @@ $ [PROJECT_PATH]/run decode [INPUT_FILE_PATH] [OUTPUT_FILE_PATH]
 All the arguments are required:
 - `[INPUT_FILE_PATH]`: path of the coded file to be decoded
 - `[OUTPUT_FILE_PATH]`: path of the decoded file
-  
+
 ### [3.3] Examples
 1. Code and decode file from dataset `IRKIS` with coder `APCA*` and window size parameter `8`, using `error_mode=epsilon`
 ```

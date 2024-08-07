@@ -15,9 +15,6 @@ CoderInput::CoderInput(CoderCommon* coder_, int data_columns_count_){
 
 void CoderInput::setNextColumn(int col_index){
     column_index = col_index;
-#if COUT
-    std::cout << "ccode mask column_index " << column_index << std::endl;
-#endif
     dataset->setColumn(column_index);
     dataset->setMode("MASK");
     input_csv->goToFirstDataRow(column_index);

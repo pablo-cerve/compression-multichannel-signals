@@ -8,7 +8,7 @@ class DecoderGorilla: public DecoderCols {
 
 public:
     using DecoderCols::DecoderCols;
-    std::vector<std::string> decodeDataColumn(bool mask_mode) override;
+    std::vector<std::string> decodeDataColumn(bool mask_mode_) override;
     static std::vector<std::string> decodeTimeDelta(DecoderGorilla* decoder);
 
 private:

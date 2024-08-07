@@ -60,9 +60,6 @@ void CoderCA::processValue(std::string x){
 
 void CoderCA::codeArchivedValueAndCreateNonNanWindow(std::string archived_value, int archived_value_int){
     codeValueRaw(archived_value);
-//    if (column_index == 1){
-//        std::cout << "codeValueRaw(" << archived_value << ")" << std::endl;
-//    }
     window->createNonNanWindow(archived_value, archived_value_int);
 }
 
@@ -72,14 +69,6 @@ void CoderCA::codeWindow(){
 
 void CoderCA::codeWindow(int window_length, std::string window_value){
     assert(window_length > 0);
-//    if (column_index == 1){
-//        std::cout << "codeValueRaw(" << window_value << ")" << std::endl;
-//    }
     codeValueRaw(window_value);
-//    if (column_index == 1){
-//        std::cout << "codeInt(" << window_length << ", " << window->window_size_bit_length << ")" << std::endl;
-//    }
-
     codeInt(window_length - 1, window->window_size_bit_length);
 }
-

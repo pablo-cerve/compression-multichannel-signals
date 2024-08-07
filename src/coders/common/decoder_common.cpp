@@ -30,8 +30,8 @@ void DecoderCommon::decodeWindowParameter(){
 void DecoderCommon::decode(){
     dataset = HeaderDecoder(input_file, output_csv).decodeHeader(data_rows_count);
 
-    bool is_lossless = Constants::isLosslessCoder(coder_name);
-    decodeDataRows(is_lossless);
+    bool mask_mode = Constants::maskModeCoder(coder_name);
+    decodeDataRows(mask_mode);
 
     closeFiles();
 }

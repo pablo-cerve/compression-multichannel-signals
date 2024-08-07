@@ -6,7 +6,7 @@
 #include "conversor.h"
 #include "Line.h"
 
-std::vector<std::string> DecoderFR::decodeDataColumn(bool mask_mode){
+std::vector<std::string> DecoderFR::decodeDataColumn(bool mask_mode_){
     column = new Column(data_rows_count, mask->total_data, mask->total_no_data);
     std::vector<int> x_coords_vector = CoderUtils::createXCoordsVectorMaskMode(mask, time_delta_vector, 0);
 

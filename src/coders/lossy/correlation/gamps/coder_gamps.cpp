@@ -14,7 +14,7 @@ void CoderGAMPS::setCoderParams(int window_size_, std::vector<int> epsilons_vect
     epsilons_vector = epsilons_vector_;
 }
 
-void CoderGAMPS::codeDataRows(bool is_lossless_){
+void CoderGAMPS::codeDataRows(bool mask_mode_){
     codeTimeDeltaColumn();
 
     ArithmeticMaskCoder* amc = new ArithmeticMaskCoder(this, dataset->data_columns_count);
@@ -46,9 +46,6 @@ std::vector<int> CoderGAMPS::getGAMPSEpsilonsVector(){
 
 void CoderGAMPS::codeTimeDeltaColumn(){
     column_index = 0;
-#if COUT
-    std::cout << "ccode column_index " << column_index << std::endl;
-#endif
     dataset->setColumn(column_index);
     dataset->setMode("DATA");
     TimeDeltaCoder::code(this);
@@ -56,11 +53,7 @@ void CoderGAMPS::codeTimeDeltaColumn(){
 
 void CoderGAMPS::codeDataTypeColumns(){
     mapping_table = new MappingTable();
-#if COUT
-    std::cout << "ccode group " << data_type_index << "/" << total_data_types << std::endl;
-#endif
     double epsilon = (double) gamps_epsilons_vector.at(data_type_index - 1);
-    // std::cout << "epsilon = " << epsilon << std::endl;
     GroupGAMPS* group_gamps = new GroupGAMPS(this, epsilon);
     GAMPSOutput* gamps_output = group_gamps->getGAMPSOutput(column_index);
     nodata_rows_mask = group_gamps->getMask();
@@ -100,9 +93,6 @@ void CoderGAMPS::codeGAMPSColumns(GAMPSOutput* gamps_output){
         base_epsilon = base_signals_epsilons->getAt(base_index);
         base_index++;
 
-    #if COUT
-        std::cout << "  code base signal i = " << column_index << " with e = " << base_epsilon << std::endl;
-    #endif
         codeGAMPSColumn(column, base_epsilon); // CODE BASE COLUMN
 
         std::vector<int> ratio_columns = mapping_table->ratioColumns(table_index);
@@ -114,9 +104,6 @@ void CoderGAMPS::codeGAMPSColumns(GAMPSOutput* gamps_output){
             column = ratio_signals[ratio_index];
             ratio_epsilon = ratio_signals_epsilons->getAt(ratio_index);
 
-        #if COUT
-            std::cout << "    code ratio signal i = " << column_index << " with e = " << ratio_epsilon << std::endl;
-        #endif
             codeGAMPSColumn(column, ratio_epsilon); // CODE RATIO COLUMN
         }
     }

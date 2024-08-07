@@ -12,7 +12,7 @@
 class CoderCommon {
 
 private:
-    virtual void codeDataRows(bool is_lossless_) = 0;
+    virtual void codeDataRows(bool mask_mode_) = 0;
     //
     // This method maps a value read in the csv file into an integer to be written in the output file.
     //

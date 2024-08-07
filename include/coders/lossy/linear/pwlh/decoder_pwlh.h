@@ -9,7 +9,7 @@ class DecoderPWLH: public DecoderCols {
 private:
     bool integer_mode;
 
-    std::vector<std::string> decodeDataColumn(bool mask_mode) override;
+    std::vector<std::string> decodeDataColumn(bool mask_mode_) override;
     void decodeWindow();
     void decodeWindowDouble(int window_size);
     void decodeWindowInt(int window_size);

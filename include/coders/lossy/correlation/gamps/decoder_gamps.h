@@ -19,7 +19,7 @@ private:
 
     MappingTable* mapping_table;
 
-    void decodeDataRows(bool is_lossless_) override;
+    void decodeDataRows(bool mask_mode_) override;
 
     void decodeTimeDeltaColumn();
     void decodeGroup();

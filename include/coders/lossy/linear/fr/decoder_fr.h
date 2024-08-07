@@ -8,7 +8,7 @@
 class DecoderFR: public DecoderCols {
 
 private:
-    std::vector<std::string> decodeDataColumn(bool mask_mode) override;
+    std::vector<std::string> decodeDataColumn(bool mask_mode_) override;
     void decodeWindow(int window_size, std::vector<int> x_coords);
     std::vector<DataItem> readDataItems(int window_size);
 

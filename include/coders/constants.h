@@ -2,9 +2,7 @@
 #ifndef CPP_PROJECT_CONSTANTS_H
 #define CPP_PROJECT_CONSTANTS_H
 
-#define COUT 0
 #define CHECKS 0
-#define RECORD_TESTS 0 // Set to 1 to set up the tests, then set to 0
 
 #include <string>
 #include <vector>
@@ -23,6 +21,7 @@ public:
     static std::string getCoderName(int coder_value);
 
     static bool isLosslessCoder(std::string coder_name);
+    static bool maskModeCoder(std::string coder_name);
     static bool requiresWindowSize(std::string coder_name);
 };
 
